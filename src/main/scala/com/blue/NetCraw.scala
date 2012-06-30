@@ -72,7 +72,7 @@ val area_map= AREA zip AREA_CODE
       val areas = node(1).text 
       val area = area_map find { ar =>areas contains(ar._1)}
       val ar = (areas toList) find {_.toByte == -96} 
-      val as= areas split ar.get 
+      val as= if(ar !=None)areas split ar.get else null
 
       println(ph)
       if(area !=None && area.get != None) { 
