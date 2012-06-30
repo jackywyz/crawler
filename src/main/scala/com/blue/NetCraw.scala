@@ -64,7 +64,7 @@ val area_map= AREA zip AREA_CODE
 
   def crawPhone(mysql:OpMySql,list:List[String]){
      list foreach{ ph=>
-      val  phone = ph slice (2,ph.length-1)
+      val  phone = ph drop 2 
       val source = new org.xml.sax.InputSource(url+phone)
       val adapter = new HTML5Parser 
       val elem = adapter.loadXML(source)
@@ -83,7 +83,7 @@ val area_map= AREA zip AREA_CODE
       while(true){
         val list = mysql select("select phone from phones" )
         crawPhone(mysql,list)
-        Thread.sleep(2*60*60*1000)
+        Thread.sleep(1*60*100*1000)
       } 
       
       }   
