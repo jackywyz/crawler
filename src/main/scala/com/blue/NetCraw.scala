@@ -73,7 +73,7 @@ val area_map= AREA zip AREA_CODE
       val area = area_map find { ar =>areas contains(ar._1)}
       println(ph)
       if(area !=None && area.get != None) { 
-      mysql update("insert into  sms_phone(phone,provcode,province) values('"+ph+"','"+area.get._2 +"','"+area.get._1+"')")
+      mysql update("insert ignore into sms_phone(phone,provcode,province) values('"+ph+"','"+area.get._2 +"','"+area.get._1+"')")
       mysql update("delete from phones where phone="+ph) 
      } 
    } 
