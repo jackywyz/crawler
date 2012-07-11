@@ -1,15 +1,34 @@
 import java.net._
 import scala.xml._
-import org.xml.sax.InputSource
 import parsing._
 
 object NetCraw{
- def netParse(url:String,extractor:Node=>String,out:Any,suffix:String=""):String={
+import java.io._
+import scala.io._
+
+implicit def enrichFile( file: File ) = new RichFile( file )
+def netParse(url:String,extractor:Node=>String,out:String=null,delay:Int=0,suffix:String=""):String={
     val source = new org.xml.sax.InputSource(url+suffix)
     val adapter = new XPATHParser 
-    val elem = adapter.loadXML(source)
-    extractor(elem)
+    val ret = extractor(adapter.loadXML(source))
+    Thread.sleep(delay*1000)
+
+    if(out !=null){
+      val file = new File(out)
+      file.text = ret 
+   }
+    ret 
+ }
+class RichFile( file: File ) {
+
+  def text = Source.fromFile( file ).mkString
+
+  def text_=( s: String ) {
+    val out = new PrintWriter( file )
+    try{ out.print( s ) }
+    finally{ out.close }
   }
+}
 }
 
 class XPATHParser extends NoBindingFactoryAdapter {
@@ -33,26 +52,14 @@ class XPATHParser extends NoBindingFactoryAdapter {
 
 object test{
 
-def crawPhone(mysql:OpMySql,list:List[String]){
-     list foreach{ ph=>
-      val  phone = ph drop 2 
-      val source = new org.xml.sax.InputSource(url+phone)
-      val adapter = new XPATHParser 
-      val elem = adapter.loadXML(source)
-      val node= (elem \\ "table"\\ "td") .filter{node =>( node \ "@class").text=="tdc2"}
-      val areas = node(1).text 
-      val area = area_map find { ar =>areas contains(ar._1)}
-      val ar = (areas toList) find {_.toByte == -96} 
-      val as= if(ar !=None)areas split ar.get else null
-
-      println(ph)
-   } 
-  }
-
  val url = "http://www.ip138.com:8080/search.asp?action=mobile&mobile="
   def main (args: Array [String]) {
+    def extra(elem:Node)={
+      val nd =  (elem  \\ "table"\\ "td") .filter{node =>( node \ "@class").text=="tdc2"}
+      nd(1).text
+    } 
       while(true){
-        crawPhone(url,null)
+        NetCraw.netParse(url,extra _,"")
         Thread.sleep(1*60*100*1000)
       } 
       
