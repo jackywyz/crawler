@@ -5,18 +5,29 @@ import parsing._
 object NetCraw{
 import java.io._
 import scala.io._
-
 implicit def enrichFile( file: File ) = new RichFile( file )
-def netParse(url:String,extractor:Node=>String,out:String=null,delay:Int=0,suffix:String=""):String={
+
+trait Outer[T]{ def out(p:T):Unit }
+class Fi(p:String) extends Outer[String]{
+  def out(ret:String){
+      val file = new File(p)
+      file.text = ret 
+}
+}
+class MySQL[T](url:String,driver:String,sql:String) extends Outer[T]{
+  def out(ret:T){
+
+}
+}
+
+def netParse[T](url:String,extractor:Node=>T,out:Outer[T]=null,delay:Int=0,suffix:String=""):T={
     val source = new org.xml.sax.InputSource(url+suffix)
     val adapter = new XPATHParser 
-    val ret = extractor(adapter.loadXML(source))
+    val ret:T = extractor(adapter.loadXML(source))
     Thread.sleep(delay*1000)
 
-    if(out !=null){
-      val file = new File(out)
-      file.text = ret 
-   }
+    if(out !=null) out.out(ret) 
+         
     ret 
  }
 class RichFile( file: File ) {
@@ -51,7 +62,7 @@ class XPATHParser extends NoBindingFactoryAdapter {
 }
 
 object test{
-
+import NetCraw._
  val url = "http://www.ip138.com:8080/search.asp?action=mobile&mobile="
   def main (args: Array [String]) {
     def extra(elem:Node)={
@@ -59,7 +70,7 @@ object test{
       nd(1).text
     } 
       while(true){
-        NetCraw.netParse(url,extra _,"")
+        NetCraw.netParse(url,extra _,new Fi("out.txt"))
         Thread.sleep(1*60*100*1000)
       } 
       
