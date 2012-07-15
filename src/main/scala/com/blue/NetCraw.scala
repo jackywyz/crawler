@@ -14,9 +14,19 @@ class Fi(p:String) extends Outer[String]{
       file.text = ret 
 }
 }
-class MySQL[T](url:String,driver:String,sql:String) extends Outer[T]{
+class SQL[T <: Product](url:String,driver:String,sql:String) extends Outer[T]{
+import org.scalaquery.session._
+import org.scalaquery.session.Database.threadLocalSession
+import org.scalaquery.ql._
+import org.scalaquery.ql.TypeMapper._
+import org.scalaquery.ql.extended.MySQLDriver.Implicit._ 
+import org.scalaquery.simple.{GetResult, StaticQuery => Q}
   def out(ret:T){
-
+    val sq = Q[T,Int]+sql 
+    val db =   Database.forURL(url,driver)
+    db withSession{
+      val ins = sq(ret).first
+}
 }
 }
 
