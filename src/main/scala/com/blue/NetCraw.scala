@@ -14,30 +14,14 @@ class Fi(p:String) extends Outer[String]{
       file.text = ret 
 }
 }
-class SQL[T <: Product](url:String,driver:String,sql:String) extends Outer[T]{
-import org.scalaquery.session._
-import org.scalaquery.session.Database.threadLocalSession
-import org.scalaquery.ql._
-import org.scalaquery.ql.TypeMapper._
-import org.scalaquery.ql.extended.MySQLDriver.Implicit._ 
-import org.scalaquery.simple.{GetResult, StaticQuery => Q}
-  def out(ret:T){
-    val sq = Q[T,Int]+sql 
-    val db =   Database.forURL(url,driver)
-    db withSession{
-      val ins = sq(ret).first
-}
-}
-}
 
 def netParse[T](url:String,extractor:Node=>T,out:Outer[T]=null,delay:Int=0,suffix:String=""):T={
     val source = new org.xml.sax.InputSource(url+suffix)
     val adapter = new XPATHParser 
     val ret:T = extractor(adapter.loadXML(source))
-    Thread.sleep(delay*1000)
 
     if(out !=null) out.out(ret) 
-         
+    Thread.sleep(delay*1000)
     ret 
  }
 class RichFile( file: File ) {
