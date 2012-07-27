@@ -1,3 +1,4 @@
+package com.blue
 import java.net._
 import scala.xml._
 import parsing._
