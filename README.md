@@ -33,4 +33,4 @@ class MySql[T] extends Outer[T]{
 
 ###Requirement
 * scala2.9.2
-* xsbt-0.11.3
+* xsbt-0.12
