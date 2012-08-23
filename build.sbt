@@ -2,7 +2,7 @@ name :="craw"
 
 organization := "com.blue"
 
-version :="0.1.3"
+version :="0.2.0"
 
 scalaVersion := "2.9.2"
 
@@ -10,7 +10,10 @@ scalaVersion := "2.9.2"
 
 libraryDependencies ++= Seq(
 "nu.validator.htmlparser" % "htmlparser" % "1.4",
-"com.twitter" % "util-eval" % "5.3.0"
+"com.twitter" % "util-eval" % "5.3.6",
+"com.typesafe.akka" % "akka-actor" % "2.0.3",
+"com.typesafe.akka" % "akka-slf4j" % "2.0.3",
+"ch.qos.logback" % "logback-classic" % "1.0.6" % "runtime"
 )
 
 
