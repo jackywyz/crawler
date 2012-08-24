@@ -73,6 +73,7 @@ class XPATHParser extends NoBindingFactoryAdapter {
 }
 
 case class Message[T](taskName:String,out:NetCraw.Outer[T])
+case class Parameter[T](url:String,extra:Node=>T,out:NetCraw.Outer[T])
 class RecvParse extends akka.actor.Actor{
   val config = com.typesafe.config.ConfigFactory.load
   val log = akka.event.Logging(context.system, this)
@@ -84,6 +85,10 @@ class RecvParse extends akka.actor.Actor{
        val extra = (new com.twitter.util.Eval).apply[Node=>Any](fun)
        val ret = NetCraw.netParse(url,extra,out)
        log.info(ret toString) 
+    case Parameter(url,extra,out)=>
+       val ret = NetCraw.netParse(url,extra,out)
+       log.info(ret toString) 
+
     case _ =>
   }
 }
