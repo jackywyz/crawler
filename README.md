@@ -39,8 +39,14 @@ class Te(f:String) extends Outer[(String,Int)]{
 
 ```properties
 craw{
-       name.url="http://www.ip138.com:8080/search.asp?action=mobile&mobile=13845623"
-       name.fun =" (elem:xml.Node)=>{ val nd =  (elem  \\\\ \"table\" \\\\ \"td\") .filter{node =>( node \\ \"@class\").text==\"tdc2\"}; (nd(1).text,2)}"
+   name1{
+     inKey="" #the input key of url
+     url=""
+     fun=""
+   }
+       name2.inKey="select key from keys"
+       name2.url="http://www.ip138.com:8080/search.asp?action=mobile&mobile=13845623"
+       name2.fun =" (elem:xml.Node)=>{ val nd =  (elem  \\\\ \"table\" \\\\ \"td\") .filter{node =>( node \\ \"@class\").text==\"tdc2\"}; (nd(1).text,2)}"
 }
 
 #should use the '\' to escape the string "  and \
