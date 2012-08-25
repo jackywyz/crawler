@@ -118,10 +118,8 @@ class RecvParse extends akka.actor.Actor{
     case Parameter(url,extra,out,inKey)=>
        if(inKey !=null) {
         val keys = out.from(inKey)
-        val context = ActorSystem("craw")
         keys foreach{ key=>
-          val rev = context.actorOf(Props[RecvParse])
-          rev ! Parameter(url+key,extra,out) 
+          self ! Parameter(url+key,extra,out) 
         }
        }else{
           val ret = NetCraw.netParse(url,extra,out)
