@@ -7,7 +7,8 @@ object Main{
       config.getString("craw."+key)
   }
   def main(args: Array[String]) {
-    
+    import collection.JavaConverters._ 
+     List(1,2).asJava
      val config = ConfigFactory.load
      if(config.hasPath("craw")){
        val keys = config.getObject("craw").keySet.toSet
